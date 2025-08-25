@@ -1,0 +1,64 @@
+{
+  "env": {
+    "es2022": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "import", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+         "disallowTypeAnnotations": false
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowTypedFunctionExpressions": true
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "groups": [["builtin", "external"], "internal", "parent", "sibling"],
+        "newlines-between": "always"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@config", "./config"], 
+          ["@start", "./start"],
+          ["@controllers", "./app/controllers"],
+          ["@schemas", "./app/schemas"],
+          ["@exceptions", "./app/exceptions"],
+          ["@middlewares", "./app/middlewares"],
+          ["@use-case", "./app/use-case"],
+          ["@validators", "./app/validators"],
+          ["@core", "./app/core"]
+
+        ],
+        "extensions": [".ts",".js", ".json"]
+      }
+    }
+  }
+}

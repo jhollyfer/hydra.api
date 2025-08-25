@@ -1,0 +1,76 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  output          = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRoleEnum {
+  FOUNDER //Fundador
+  SPONSOR // Patrocinador
+  PARTICIPANT // Brincante
+  COLLABORATOR // Colaborador
+  ADMINISTRATOR // Administrador
+}
+
+model User {
+  id          String       @id @default(uuid())
+  name        String
+  email       String?      @unique
+  password    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  // Um usuário pode ter um perfil de membro
+  member      Member?      @relation("member")
+  role        UserRoleEnum
+  address     Address?     @relation("address")
+  responsible Responsible? @relation("responsibles")
+
+  @@map("users")
+}
+
+model Member {
+  id        String   @id @default(uuid())
+  cpf       String   @unique
+  rg        String?
+  birthDate DateTime
+  extras    String?
+  // Este membro pertence a qual usuário
+  userId    String?  @unique
+  user      User?    @relation("member", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("members")
+}
+
+model Address {
+  id           String   @id @default(uuid())
+  street       String
+  number       String?
+  complement   String?
+  neighborhood String
+  // Este endereço pertence a qual usuário
+  userId       String?  @unique
+  user         User?    @relation("address", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("addresses")
+}
+
+model Responsible {
+  id        String   @id @default(uuid())
+  mother    String
+  father    String?
+  userId    String   @unique
+  user      User     @relation("responsibles", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("responsibles")
+}
