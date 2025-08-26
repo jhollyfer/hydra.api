@@ -19,7 +19,7 @@ export default class CreateUseCase {
   }: z.infer<typeof CreateMemberSchema>): Promise<Response> {
     const exist = await prisma.member.findUnique({
       where: {
-        cpf: member.cpf,
+        rg: member.rg,
       },
     });
 
@@ -36,8 +36,8 @@ export default class CreateUseCase {
             birthDate: new Date(member.birthDate),
           },
         },
-        address: { create: address },
         responsible: { create: responsible },
+        ...(address && { address: { create: address } }),
       },
       include: {
         member: true,

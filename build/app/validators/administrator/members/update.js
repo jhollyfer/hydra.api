@@ -29,14 +29,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var __decorateClass = (decorators, target, key, kind) => {
-  var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
-  for (var i = decorators.length - 1, decorator; i >= 0; i--)
-    if (decorator = decorators[i])
-      result = (kind ? decorator(target, key, result) : decorator(result)) || result;
-  if (kind && result) __defProp(target, key, result);
-  return result;
-};
 
 // generated/prisma/runtime/library.js
 var require_library = __commonJS({
@@ -391,7 +383,7 @@ var require_library = __commonJS({
       "use strict";
     });
     var Qf = {};
-    tr(Qf, { DMMF: () => ut, Debug: () => N, Decimal: () => Fe, Extensions: () => ni, MetricsClient: () => Nr, PrismaClientInitializationError: () => v, PrismaClientKnownRequestError: () => z3, PrismaClientRustPanicError: () => le, PrismaClientUnknownRequestError: () => V, PrismaClientValidationError: () => Z, Public: () => ii, Sql: () => oe, createParam: () => Ra, defineDmmfProperty: () => ka, deserializeJsonResponse: () => qr, deserializeRawResult: () => Xn, dmmfToRuntimeDataModel: () => $s, empty: () => La, getPrismaClient: () => bu, getRuntime: () => Gn, join: () => Na, makeStrictEnum: () => Eu, makeTypedQueryFactory: () => _a, objectEnumValues: () => Dn, raw: () => no, serializeJsonQuery: () => Mn, skip: () => Fn, sqltag: () => io, warnEnvConflicts: () => wu, warnOnce: () => st });
+    tr(Qf, { DMMF: () => ut, Debug: () => N, Decimal: () => Fe, Extensions: () => ni, MetricsClient: () => Nr, PrismaClientInitializationError: () => v, PrismaClientKnownRequestError: () => z2, PrismaClientRustPanicError: () => le, PrismaClientUnknownRequestError: () => V, PrismaClientValidationError: () => Z, Public: () => ii, Sql: () => oe, createParam: () => Ra, defineDmmfProperty: () => ka, deserializeJsonResponse: () => qr, deserializeRawResult: () => Xn, dmmfToRuntimeDataModel: () => $s, empty: () => La, getPrismaClient: () => bu, getRuntime: () => Gn, join: () => Na, makeStrictEnum: () => Eu, makeTypedQueryFactory: () => _a, objectEnumValues: () => Dn, raw: () => no, serializeJsonQuery: () => Mn, skip: () => Fn, sqltag: () => io, warnEnvConflicts: () => wu, warnOnce: () => st });
     module2.exports = Ru(Qf);
     var ni = {};
     tr(ni, { defineExtension: () => _o, getExtensionContext: () => No });
@@ -1226,7 +1218,7 @@ Env vars from ${Y(l)} overwrite the ones from ${Y(a)}
       }
     };
     x(v, "PrismaClientInitializationError");
-    var z3 = class extends Error {
+    var z2 = class extends Error {
       code;
       meta;
       clientVersion;
@@ -1238,7 +1230,7 @@ Env vars from ${Y(l)} overwrite the ones from ${Y(a)}
         return "PrismaClientKnownRequestError";
       }
     };
-    x(z3, "PrismaClientKnownRequestError");
+    x(z2, "PrismaClientKnownRequestError");
     var le = class extends Error {
       clientVersion;
       constructor(r, t) {
@@ -3629,7 +3621,7 @@ Note that ${s.bold("include")} statements only accept relation fields.`, a;
     }
     var dm = "P2037";
     function Mr({ error: e, user_facing_error: r }, t, n) {
-      return r.error_code ? new z3(mm(r, n), { code: r.error_code, clientVersion: t, meta: r.meta, batchRequestIdx: r.batch_request_idx }) : new V(e, { clientVersion: t, batchRequestIdx: r.batch_request_idx });
+      return r.error_code ? new z2(mm(r, n), { code: r.error_code, clientVersion: t, meta: r.meta, batchRequestIdx: r.batch_request_idx }) : new V(e, { clientVersion: t, batchRequestIdx: r.batch_request_idx });
     }
     function mm(e, r) {
       let t = e.message;
@@ -4415,7 +4407,7 @@ how you used Prisma Client in the issue.
     async function Lt(e, r) {
       if (e.ok) return;
       let t = { clientVersion: r, response: e }, n = await mf(e);
-      if (n.type === "QueryEngineError") throw new z3(n.body.message, { code: n.body.error_code, clientVersion: r });
+      if (n.type === "QueryEngineError") throw new z2(n.body.message, { code: n.body.error_code, clientVersion: r });
       if (n.type === "DataProxyError") {
         if (n.body === "InternalDataProxyError") throw new Br(t, "Internal Data Proxy error");
         if ("EngineNotStarted" in n.body) {
@@ -4780,7 +4772,7 @@ ${r}`, R(t, true));
         let a = this.parseEngineResponse(s);
         if (Sf(a)) {
           let l = this.getExternalAdapterError(a, i?.errorRegistry);
-          throw l ? l.error : new z3(a.message, { code: a.error_code, clientVersion: this.config.clientVersion, meta: a.meta });
+          throw l ? l.error : new z2(a.message, { code: a.error_code, clientVersion: this.config.clientVersion, meta: a.meta });
         } else if (typeof a.message == "string") throw new V(a.message, { clientVersion: this.config.clientVersion });
         return a;
       }
@@ -5277,14 +5269,14 @@ More Information: https://pris.ly/d/execute-raw
       }
       handleRequestError({ error: r, clientMethod: t, callsite: n, transaction: i, args: o, modelName: s, globalOmit: a }) {
         if (kf(r), Nf(r, i)) throw r;
-        if (r instanceof z3 && Lf(r)) {
+        if (r instanceof z2 && Lf(r)) {
           let u = iu(r.meta);
           _n({ args: o, errors: [u], callsite: n, errorFormat: this.client._errorFormat, originalMethod: t, clientVersion: this.client._clientVersion, globalOmit: a });
         }
         let l = r.message;
         if (n && (l = vn({ callsite: n, originalMethod: t, isPanic: r.isPanic, showColors: this.client._errorFormat === "pretty", message: l })), l = this.sanitizeMessage(l), r.code) {
           let u = s ? { modelName: s, ...r.meta } : r.meta;
-          throw new z3(l, { code: r.code, clientVersion: this.client._clientVersion, meta: u, batchRequestIdx: r.batchRequestIdx });
+          throw new z2(l, { code: r.code, clientVersion: this.client._clientVersion, meta: u, batchRequestIdx: r.batchRequestIdx });
         } else {
           if (r.isPanic) throw new le(l, this.client._clientVersion);
           if (r instanceof V) throw new V(l, { clientVersion: this.client._clientVersion, batchRequestIdx: r.batchRequestIdx });
@@ -5554,7 +5546,7 @@ ${n}`;
             let p = ri.default.resolve(e.dirname, e.relativePath);
             yu.default.existsSync(p) || (p = e.dirname), rr("dirname", e.dirname), rr("relativePath", e.relativePath), rr("cwd", p);
             let d = u.engine || {};
-            if (l.errorFormat ? this._errorFormat = l.errorFormat : process.env.NODE_ENV === "production" ? this._errorFormat = "minimal" : process.env.NO_COLOR ? this._errorFormat = "colorless" : this._errorFormat = "colorless", this._runtimeDataModel = e.runtimeDataModel, this._engineConfig = { cwd: p, dirname: e.dirname, enableDebugLogs: c, allowTriggerPanic: d.allowTriggerPanic, prismaPath: d.binaryPath ?? void 0, engineEndpoint: d.endpoint, generator: e.generator, showColors: this._errorFormat === "pretty", logLevel: l.log && eu(l.log), logQueries: l.log && !!(typeof l.log == "string" ? l.log === "query" : l.log.find((f) => typeof f == "string" ? f === "query" : f.level === "query")), env: a?.parsed ?? {}, flags: [], engineWasm: e.engineWasm, compilerWasm: e.compilerWasm, clientVersion: e.clientVersion, engineVersion: e.engineVersion, previewFeatures: this._previewFeatures, activeProvider: e.activeProvider, inlineSchema: e.inlineSchema, overrideDatasources: pl(l, e.datasourceNames), inlineDatasources: e.inlineDatasources, inlineSchemaHash: e.inlineSchemaHash, tracingHelper: this._tracingHelper, transactionOptions: { maxWait: l.transactionOptions?.maxWait ?? 2e3, timeout: l.transactionOptions?.timeout ?? 5e3, isolationLevel: l.transactionOptions?.isolationLevel }, logEmitter: i, isBundled: e.isBundled, adapter: s }, this._accelerateEngineConfig = { ...this._engineConfig, accelerateUtils: { resolveDatasourceUrl: Vr, getBatchRequestPayload: Fr, prismaGraphQLToJSError: Mr, PrismaClientUnknownRequestError: V, PrismaClientInitializationError: v, PrismaClientKnownRequestError: z3, debug: N("prisma:client:accelerateEngine"), engineVersion: fu.version, clientVersion: e.clientVersion } }, rr("clientVersion", e.clientVersion), this._engine = jl(e, this._engineConfig), this._requestHandler = new ei(this, i), l.log) for (let f of l.log) {
+            if (l.errorFormat ? this._errorFormat = l.errorFormat : process.env.NODE_ENV === "production" ? this._errorFormat = "minimal" : process.env.NO_COLOR ? this._errorFormat = "colorless" : this._errorFormat = "colorless", this._runtimeDataModel = e.runtimeDataModel, this._engineConfig = { cwd: p, dirname: e.dirname, enableDebugLogs: c, allowTriggerPanic: d.allowTriggerPanic, prismaPath: d.binaryPath ?? void 0, engineEndpoint: d.endpoint, generator: e.generator, showColors: this._errorFormat === "pretty", logLevel: l.log && eu(l.log), logQueries: l.log && !!(typeof l.log == "string" ? l.log === "query" : l.log.find((f) => typeof f == "string" ? f === "query" : f.level === "query")), env: a?.parsed ?? {}, flags: [], engineWasm: e.engineWasm, compilerWasm: e.compilerWasm, clientVersion: e.clientVersion, engineVersion: e.engineVersion, previewFeatures: this._previewFeatures, activeProvider: e.activeProvider, inlineSchema: e.inlineSchema, overrideDatasources: pl(l, e.datasourceNames), inlineDatasources: e.inlineDatasources, inlineSchemaHash: e.inlineSchemaHash, tracingHelper: this._tracingHelper, transactionOptions: { maxWait: l.transactionOptions?.maxWait ?? 2e3, timeout: l.transactionOptions?.timeout ?? 5e3, isolationLevel: l.transactionOptions?.isolationLevel }, logEmitter: i, isBundled: e.isBundled, adapter: s }, this._accelerateEngineConfig = { ...this._engineConfig, accelerateUtils: { resolveDatasourceUrl: Vr, getBatchRequestPayload: Fr, prismaGraphQLToJSError: Mr, PrismaClientUnknownRequestError: V, PrismaClientInitializationError: v, PrismaClientKnownRequestError: z2, debug: N("prisma:client:accelerateEngine"), engineVersion: fu.version, clientVersion: e.clientVersion } }, rr("clientVersion", e.clientVersion), this._engine = jl(e, this._engineConfig), this._requestHandler = new ei(this, i), l.log) for (let f of l.log) {
               let h = typeof f == "string" ? f : f.emit === "stdout" ? f.level : null;
               h && this.$on(h, (g) => {
                 tt.log(`${tt.tags[h] ?? ""}`, g.message || g.query);
@@ -5904,8 +5896,8 @@ var require_prisma = __commonJS({
       rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
       schemaEnvPath: config.relativeEnvPaths.schemaEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.schemaEnvPath)
     });
-    var PrismaClient2 = getPrismaClient2(config);
-    exports2.PrismaClient = PrismaClient2;
+    var PrismaClient = getPrismaClient2(config);
+    exports2.PrismaClient = PrismaClient;
     Object.assign(exports2, Prisma);
     path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
     path.join(process.cwd(), "generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node");
@@ -5914,316 +5906,59 @@ var require_prisma = __commonJS({
   }
 });
 
-// app/controllers/authentication/sign-in.controller.ts
-var sign_in_controller_exports = {};
-__export(sign_in_controller_exports, {
-  default: () => SignInController
+// app/validators/administrator/members/update.ts
+var update_exports = {};
+__export(update_exports, {
+  default: () => update_default
 });
-module.exports = __toCommonJS(sign_in_controller_exports);
-var import_fastify_decorators2 = require("fastify-decorators");
-
-// start/env.ts
-var import_config = require("dotenv/config");
-var import_zod = require("zod");
-var schema = import_zod.z.object({
-  NODE_ENV: import_zod.z.enum(["development", "test", "production"]).default("development"),
-  PORT: import_zod.z.coerce.number().default(3e3),
-  JWT_PUBLIC_KEY: import_zod.z.string().trim(),
-  JWT_PRIVATE_KEY: import_zod.z.string().trim(),
-  COOKIE_SECRET: import_zod.z.string().trim(),
-  ADMIN_PASSWORD: import_zod.z.string().trim(),
-  ADMIN_EMAIL: import_zod.z.string().trim(),
-  DATABASE_URL: import_zod.z.string().trim(),
-  DB_HOST: import_zod.z.string().trim().default("localhost"),
-  DB_PORT: import_zod.z.coerce.number().default(5432),
-  DB_USER: import_zod.z.string().trim(),
-  DB_PASSWORD: import_zod.z.string().trim(),
-  DB_DATABASE: import_zod.z.string().trim()
-});
-var validation = schema.safeParse(process.env);
-if (!validation.success) {
-  console.error("Invalid environment variables", validation.error.format());
-  throw new Error("Invalid environment variables");
-}
-var Env = validation.data;
-
-// app/use-case/authentication/sign-in.use-case.ts
-var import_bcryptjs = __toESM(require("bcryptjs"));
-var import_fastify_decorators = require("fastify-decorators");
-
-// config/database.ts
-var import_adapter_neon = require("@prisma/adapter-neon");
+module.exports = __toCommonJS(update_exports);
 var import_prisma = __toESM(require_prisma());
-var prisma = new import_prisma.PrismaClient();
-if (Env.NODE_ENV === "production") {
-  const adapter = new import_adapter_neon.PrismaNeon({
-    connectionString: Env.DATABASE_URL
-  });
-  prisma = new import_prisma.PrismaClient({
-    adapter
-  });
-}
-
-// app/core/either.ts
-var Left = class {
-  constructor(value) {
-    this.value = value;
-  }
-  isRight() {
-    return false;
-  }
-  isLeft() {
-    return true;
-  }
-};
-var Right = class {
-  constructor(value) {
-    this.value = value;
-  }
-  isRight() {
-    return true;
-  }
-  isLeft() {
-    return false;
-  }
-};
-var left = (value) => {
-  return new Left(value);
-};
-var right = (value) => {
-  return new Right(value);
-};
-
-// app/exceptions/application.ts
-var ApplicationException = class _ApplicationException extends Error {
-  constructor(payload) {
-    super(payload.message);
-    this.cause = payload.cause;
-    this.code = payload.code;
-  }
-  // Métodos estáticos para cada código HTTP de erro 4xx e 5xx
-  // 4xx Client Errors
-  static BadRequest(message = "Bad Request", cause = "INVALID_PARAMETERS") {
-    return new _ApplicationException({ message, code: 400, cause });
-  }
-  static Unauthorized(message = "Unauthorized", cause = "AUTHENTICATION_REQUIRED") {
-    return new _ApplicationException({ message, code: 401, cause });
-  }
-  static PaymentRequired(message = "Payment Required", cause = "PAYMENT_REQUIRED") {
-    return new _ApplicationException({ message, code: 402, cause });
-  }
-  static Forbidden(message = "Forbidden", cause = "ACCESS_DENIED") {
-    return new _ApplicationException({ message, code: 403, cause });
-  }
-  static NotFound(message = "Not Found", cause = "RESOURCE_NOT_FOUND") {
-    return new _ApplicationException({ message, code: 404, cause });
-  }
-  static MethodNotAllowed(message = "Method Not Allowed", cause = "INVALID_HTTP_METHOD") {
-    return new _ApplicationException({ message, code: 405, cause });
-  }
-  static NotAcceptable(message = "Not Acceptable", cause = "REQUEST_NOT_ACCEPTABLE") {
-    return new _ApplicationException({ message, code: 406, cause });
-  }
-  static ProxyAuthenticationRequired(message = "Proxy Authentication Required", cause = "PROXY_AUTHENTICATION_REQUIRED") {
-    return new _ApplicationException({ message, code: 407, cause });
-  }
-  static RequestTimeout(message = "Request Timeout", cause = "REQUEST_TIMEOUT") {
-    return new _ApplicationException({ message, code: 408, cause });
-  }
-  static Conflict(message = "Conflict", cause = "CONFLICT_IN_REQUEST") {
-    return new _ApplicationException({ message, code: 409, cause });
-  }
-  static Gone(message = "Gone", cause = "RESOURCE_GONE") {
-    return new _ApplicationException({ message, code: 410, cause });
-  }
-  static LengthRequired(message = "Length Required", cause = "CONTENT_LENGTH_REQUIRED") {
-    return new _ApplicationException({ message, code: 411, cause });
-  }
-  static PreconditionFailed(message = "Precondition Failed", cause = "PRECONDITION_NOT_MET") {
-    return new _ApplicationException({ message, code: 412, cause });
-  }
-  static PayloadTooLarge(message = "Payload Too Large", cause = "PAYLOAD_TOO_LARGE") {
-    return new _ApplicationException({ message, code: 413, cause });
-  }
-  static URITooLong(message = "URI Too Long", cause = "URI_TOO_LONG") {
-    return new _ApplicationException({ message, code: 414, cause });
-  }
-  static UnsupportedMediaType(message = "Unsupported Media Type", cause = "UNSUPPORTED_MEDIA_TYPE") {
-    return new _ApplicationException({ message, code: 415, cause });
-  }
-  static RangeNotSatisfiable(message = "Range Not Satisfiable", cause = "RANGE_NOT_SATISFIABLE") {
-    return new _ApplicationException({ message, code: 416, cause });
-  }
-  static ExpectationFailed(message = "Expectation Failed", cause = "EXPECTATION_FAILED") {
-    return new _ApplicationException({ message, code: 417, cause });
-  }
-  static IAmATeapot(message = "I'm a teapot", cause = "TEAPOT_ERROR") {
-    return new _ApplicationException({ message, code: 418, cause });
-  }
-  static MisdirectedRequest(message = "Misdirected Request", cause = "MISDIRECTED_REQUEST") {
-    return new _ApplicationException({ message, code: 421, cause });
-  }
-  static UnprocessableEntity(message = "Unprocessable Entity", cause = "UNPROCESSABLE_ENTITY") {
-    return new _ApplicationException({ message, code: 422, cause });
-  }
-  static Locked(message = "Locked", cause = "RESOURCE_LOCKED") {
-    return new _ApplicationException({ message, code: 423, cause });
-  }
-  static FailedDependency(message = "Failed Dependency", cause = "FAILED_DEPENDENCY") {
-    return new _ApplicationException({ message, code: 424, cause });
-  }
-  static TooEarly(message = "Too Early", cause = "TOO_EARLY") {
-    return new _ApplicationException({ message, code: 425, cause });
-  }
-  static UpgradeRequired(message = "Upgrade Required", cause = "UPGRADE_REQUIRED") {
-    return new _ApplicationException({ message, code: 426, cause });
-  }
-  static PreconditionRequired(message = "Precondition Required", cause = "PRECONDITION_REQUIRED") {
-    return new _ApplicationException({ message, code: 428, cause });
-  }
-  static TooManyRequests(message = "Too Many Requests", cause = "TOO_MANY_REQUESTS") {
-    return new _ApplicationException({ message, code: 429, cause });
-  }
-  static RequestHeaderFieldsTooLarge(message = "Request Header Fields Too Large", cause = "HEADER_FIELDS_TOO_LARGE") {
-    return new _ApplicationException({ message, code: 431, cause });
-  }
-  static UnavailableForLegalReasons(message = "Unavailable For Legal Reasons", cause = "LEGAL_RESTRICTIONS") {
-    return new _ApplicationException({ message, code: 451, cause });
-  }
-  // 5xx Server Errors
-  static InternalServerError(message = "Internal Server Error", cause = "SERVER_ERROR") {
-    return new _ApplicationException({ message, code: 500, cause });
-  }
-  static NotImplemented(message = "Not Implemented", cause = "NOT_IMPLEMENTED") {
-    return new _ApplicationException({ message, code: 501, cause });
-  }
-  static BadGateway(message = "Bad Gateway", cause = "BAD_GATEWAY") {
-    return new _ApplicationException({ message, code: 502, cause });
-  }
-  static ServiceUnavailable(message = "Service Unavailable", cause = "SERVICE_UNAVAILABLE") {
-    return new _ApplicationException({ message, code: 503, cause });
-  }
-  static GatewayTimeout(message = "Gateway Timeout", cause = "GATEWAY_TIMEOUT") {
-    return new _ApplicationException({ message, code: 504, cause });
-  }
-  static HTTPVersionNotSupported(message = "HTTP Version Not Supported", cause = "HTTP_VERSION_NOT_SUPPORTED") {
-    return new _ApplicationException({ message, code: 505, cause });
-  }
-  static VariantAlsoNegotiates(message = "Variant Also Negotiates", cause = "VARIANT_NEGOTIATION_ERROR") {
-    return new _ApplicationException({ message, code: 506, cause });
-  }
-  static InsufficientStorage(message = "Insufficient Storage", cause = "INSUFFICIENT_STORAGE") {
-    return new _ApplicationException({ message, code: 507, cause });
-  }
-  static LoopDetected(message = "Loop Detected", cause = "LOOP_DETECTED") {
-    return new _ApplicationException({ message, code: 508, cause });
-  }
-  static NotExtended(message = "Not Extended", cause = "NOT_EXTENDED") {
-    return new _ApplicationException({ message, code: 510, cause });
-  }
-  static NetworkAuthenticationRequired(message = "Network Authentication Required", cause = "NETWORK_AUTHENTICATION_REQUIRED") {
-    return new _ApplicationException({ message, code: 511, cause });
-  }
-};
-
-// app/use-case/authentication/sign-in.use-case.ts
-var SignInUseCase = class {
-  // constructor(
-  // 	private readonly repository: UserRepositoryContract = getInstanceByToken(
-  // 		UserRepositoryMongoose,
-  // 	),
-  // ) {}
-  async execute(payload) {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: payload.email
-      }
-    });
-    if (!user)
-      return left(ApplicationException.Unauthorized("Invalid credentials"));
-    const passwordMatch = await import_bcryptjs.default.compare(
-      payload.password,
-      user.password
-    );
-    if (!passwordMatch)
-      return left(ApplicationException.Unauthorized("Invalid credentials"));
-    return right(user);
-  }
-};
-SignInUseCase = __decorateClass([
-  (0, import_fastify_decorators.Service)()
-], SignInUseCase);
-
-// app/validators/authentication/sign-in.validator.ts
-var import_zod2 = __toESM(require("zod"));
-var SignInSchema = import_zod2.default.object({
-  email: import_zod2.default.string().trim(),
-  password: import_zod2.default.string().trim()
+var import_zod = __toESM(require("zod"));
+var Address = import_zod.default.object({
+  number: import_zod.default.string().trim().nullable().transform((value) => {
+    if (!value) return null;
+    return value;
+  }),
+  neighborhood: import_zod.default.string().trim().nullable().transform((value) => {
+    if (!value) return null;
+    return value;
+  }),
+  complement: import_zod.default.string().trim().nullable().transform((value) => {
+    if (!value) return null;
+    return value;
+  }),
+  street: import_zod.default.string().trim().nullable().transform((value) => {
+    if (!value) return null;
+    return value;
+  })
 });
-
-// app/controllers/authentication/sign-in.controller.ts
-var SignInController = class {
-  constructor(useCase = (0, import_fastify_decorators2.getInstanceByToken)(SignInUseCase)) {
-    this.useCase = useCase;
-  }
-  async handle(request, response) {
-    const payload = SignInSchema.parse(request.body);
-    const result = await this.useCase.execute(payload);
-    if (result.isLeft()) {
-      const error = result.value;
-      return response.status(error.code).send({
-        message: error.message,
-        code: error.code,
-        cause: error.cause
-      });
-    }
-    const jwt = {
-      email: result?.value?.email,
-      name: result?.value?.name,
-      sub: result?.value?.id
-    };
-    const accessToken = await response.jwtSign(jwt, {
-      sub: result?.value?.id,
-      expiresIn: "1d"
-    });
-    const refreshToken = await response.jwtSign(
-      {
-        sub: result?.value?.id,
-        type: "refresh"
-      },
-      {
-        sub: result?.value?.id,
-        expiresIn: "7d"
-      }
-    );
-    const cookieOptions = {
-      path: "/",
-      secure: Env.NODE_ENV === "production",
-      sameSite: "lax",
-      httpOnly: true
-    };
-    response.setCookie("accessToken", accessToken, {
-      ...cookieOptions,
-      maxAge: 24 * 60 * 60 * 1e3
-      // 24 horas
-    }).setCookie("refreshToken", refreshToken, {
-      ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1e3
-      // 7 dias em ms
-    });
-    return response.status(200).send();
-  }
-};
-__decorateClass([
-  (0, import_fastify_decorators2.POST)({
-    url: "/sign-in"
+var Responsible = import_zod.default.object({
+  mother: import_zod.default.string().trim(),
+  father: import_zod.default.string().trim().nullable().transform((value) => {
+    if (!value) return null;
+    return value;
   })
-], SignInController.prototype, "handle", 1);
-SignInController = __decorateClass([
-  (0, import_fastify_decorators2.Controller)({
-    route: "authentication"
-  })
-], SignInController);
+});
+var UpdateMemberSchema = import_zod.default.object({
+  name: import_zod.default.string().trim(),
+  cpf: import_zod.default.string().trim().nullable().transform((value) => {
+    if (!value) return null;
+    return value;
+  }),
+  rg: import_zod.default.string().trim(),
+  birthDate: import_zod.default.string().trim(),
+  extras: import_zod.default.string().trim().nullable().transform((value) => {
+    if (!value) return null;
+    return value;
+  }),
+  role: import_zod.default.enum(Object.values(import_prisma.UserRoleEnum)),
+  address: Address.nullable().transform((value) => {
+    if (!value) return null;
+    return value;
+  }),
+  responsible: Responsible
+});
+var update_default = UpdateMemberSchema;
 /*! Bundled license information:
 
 decimal.js/decimal.mjs:

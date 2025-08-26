@@ -91,11 +91,6 @@ kernel.register(jwt, {
   },
 });
 
-kernel.addHook('preHandler', async (request, reply) => {
-  console.log('Request headers:', request.headers);
-  console.log('Request origin:', request.headers.origin);
-});
-
 kernel.setErrorHandler((error, request, response) => {
   console.error('Error details:', JSON.stringify(error, null, 2));
   console.error('Request URL:', request.url);

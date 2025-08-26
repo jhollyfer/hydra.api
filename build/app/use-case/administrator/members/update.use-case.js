@@ -391,7 +391,7 @@ var require_library = __commonJS({
       "use strict";
     });
     var Qf = {};
-    tr(Qf, { DMMF: () => ut, Debug: () => N, Decimal: () => Fe, Extensions: () => ni, MetricsClient: () => Nr, PrismaClientInitializationError: () => v, PrismaClientKnownRequestError: () => z3, PrismaClientRustPanicError: () => le, PrismaClientUnknownRequestError: () => V, PrismaClientValidationError: () => Z, Public: () => ii, Sql: () => oe, createParam: () => Ra, defineDmmfProperty: () => ka, deserializeJsonResponse: () => qr, deserializeRawResult: () => Xn, dmmfToRuntimeDataModel: () => $s, empty: () => La, getPrismaClient: () => bu, getRuntime: () => Gn, join: () => Na, makeStrictEnum: () => Eu, makeTypedQueryFactory: () => _a, objectEnumValues: () => Dn, raw: () => no, serializeJsonQuery: () => Mn, skip: () => Fn, sqltag: () => io, warnEnvConflicts: () => wu, warnOnce: () => st });
+    tr(Qf, { DMMF: () => ut, Debug: () => N, Decimal: () => Fe, Extensions: () => ni, MetricsClient: () => Nr, PrismaClientInitializationError: () => v, PrismaClientKnownRequestError: () => z2, PrismaClientRustPanicError: () => le, PrismaClientUnknownRequestError: () => V, PrismaClientValidationError: () => Z, Public: () => ii, Sql: () => oe, createParam: () => Ra, defineDmmfProperty: () => ka, deserializeJsonResponse: () => qr, deserializeRawResult: () => Xn, dmmfToRuntimeDataModel: () => $s, empty: () => La, getPrismaClient: () => bu, getRuntime: () => Gn, join: () => Na, makeStrictEnum: () => Eu, makeTypedQueryFactory: () => _a, objectEnumValues: () => Dn, raw: () => no, serializeJsonQuery: () => Mn, skip: () => Fn, sqltag: () => io, warnEnvConflicts: () => wu, warnOnce: () => st });
     module2.exports = Ru(Qf);
     var ni = {};
     tr(ni, { defineExtension: () => _o, getExtensionContext: () => No });
@@ -1226,7 +1226,7 @@ Env vars from ${Y(l)} overwrite the ones from ${Y(a)}
       }
     };
     x(v, "PrismaClientInitializationError");
-    var z3 = class extends Error {
+    var z2 = class extends Error {
       code;
       meta;
       clientVersion;
@@ -1238,7 +1238,7 @@ Env vars from ${Y(l)} overwrite the ones from ${Y(a)}
         return "PrismaClientKnownRequestError";
       }
     };
-    x(z3, "PrismaClientKnownRequestError");
+    x(z2, "PrismaClientKnownRequestError");
     var le = class extends Error {
       clientVersion;
       constructor(r, t) {
@@ -3629,7 +3629,7 @@ Note that ${s.bold("include")} statements only accept relation fields.`, a;
     }
     var dm = "P2037";
     function Mr({ error: e, user_facing_error: r }, t, n) {
-      return r.error_code ? new z3(mm(r, n), { code: r.error_code, clientVersion: t, meta: r.meta, batchRequestIdx: r.batch_request_idx }) : new V(e, { clientVersion: t, batchRequestIdx: r.batch_request_idx });
+      return r.error_code ? new z2(mm(r, n), { code: r.error_code, clientVersion: t, meta: r.meta, batchRequestIdx: r.batch_request_idx }) : new V(e, { clientVersion: t, batchRequestIdx: r.batch_request_idx });
     }
     function mm(e, r) {
       let t = e.message;
@@ -4415,7 +4415,7 @@ how you used Prisma Client in the issue.
     async function Lt(e, r) {
       if (e.ok) return;
       let t = { clientVersion: r, response: e }, n = await mf(e);
-      if (n.type === "QueryEngineError") throw new z3(n.body.message, { code: n.body.error_code, clientVersion: r });
+      if (n.type === "QueryEngineError") throw new z2(n.body.message, { code: n.body.error_code, clientVersion: r });
       if (n.type === "DataProxyError") {
         if (n.body === "InternalDataProxyError") throw new Br(t, "Internal Data Proxy error");
         if ("EngineNotStarted" in n.body) {
@@ -4780,7 +4780,7 @@ ${r}`, R(t, true));
         let a = this.parseEngineResponse(s);
         if (Sf(a)) {
           let l = this.getExternalAdapterError(a, i?.errorRegistry);
-          throw l ? l.error : new z3(a.message, { code: a.error_code, clientVersion: this.config.clientVersion, meta: a.meta });
+          throw l ? l.error : new z2(a.message, { code: a.error_code, clientVersion: this.config.clientVersion, meta: a.meta });
         } else if (typeof a.message == "string") throw new V(a.message, { clientVersion: this.config.clientVersion });
         return a;
       }
@@ -5277,14 +5277,14 @@ More Information: https://pris.ly/d/execute-raw
       }
       handleRequestError({ error: r, clientMethod: t, callsite: n, transaction: i, args: o, modelName: s, globalOmit: a }) {
         if (kf(r), Nf(r, i)) throw r;
-        if (r instanceof z3 && Lf(r)) {
+        if (r instanceof z2 && Lf(r)) {
           let u = iu(r.meta);
           _n({ args: o, errors: [u], callsite: n, errorFormat: this.client._errorFormat, originalMethod: t, clientVersion: this.client._clientVersion, globalOmit: a });
         }
         let l = r.message;
         if (n && (l = vn({ callsite: n, originalMethod: t, isPanic: r.isPanic, showColors: this.client._errorFormat === "pretty", message: l })), l = this.sanitizeMessage(l), r.code) {
           let u = s ? { modelName: s, ...r.meta } : r.meta;
-          throw new z3(l, { code: r.code, clientVersion: this.client._clientVersion, meta: u, batchRequestIdx: r.batchRequestIdx });
+          throw new z2(l, { code: r.code, clientVersion: this.client._clientVersion, meta: u, batchRequestIdx: r.batchRequestIdx });
         } else {
           if (r.isPanic) throw new le(l, this.client._clientVersion);
           if (r instanceof V) throw new V(l, { clientVersion: this.client._clientVersion, batchRequestIdx: r.batchRequestIdx });
@@ -5554,7 +5554,7 @@ ${n}`;
             let p = ri.default.resolve(e.dirname, e.relativePath);
             yu.default.existsSync(p) || (p = e.dirname), rr("dirname", e.dirname), rr("relativePath", e.relativePath), rr("cwd", p);
             let d = u.engine || {};
-            if (l.errorFormat ? this._errorFormat = l.errorFormat : process.env.NODE_ENV === "production" ? this._errorFormat = "minimal" : process.env.NO_COLOR ? this._errorFormat = "colorless" : this._errorFormat = "colorless", this._runtimeDataModel = e.runtimeDataModel, this._engineConfig = { cwd: p, dirname: e.dirname, enableDebugLogs: c, allowTriggerPanic: d.allowTriggerPanic, prismaPath: d.binaryPath ?? void 0, engineEndpoint: d.endpoint, generator: e.generator, showColors: this._errorFormat === "pretty", logLevel: l.log && eu(l.log), logQueries: l.log && !!(typeof l.log == "string" ? l.log === "query" : l.log.find((f) => typeof f == "string" ? f === "query" : f.level === "query")), env: a?.parsed ?? {}, flags: [], engineWasm: e.engineWasm, compilerWasm: e.compilerWasm, clientVersion: e.clientVersion, engineVersion: e.engineVersion, previewFeatures: this._previewFeatures, activeProvider: e.activeProvider, inlineSchema: e.inlineSchema, overrideDatasources: pl(l, e.datasourceNames), inlineDatasources: e.inlineDatasources, inlineSchemaHash: e.inlineSchemaHash, tracingHelper: this._tracingHelper, transactionOptions: { maxWait: l.transactionOptions?.maxWait ?? 2e3, timeout: l.transactionOptions?.timeout ?? 5e3, isolationLevel: l.transactionOptions?.isolationLevel }, logEmitter: i, isBundled: e.isBundled, adapter: s }, this._accelerateEngineConfig = { ...this._engineConfig, accelerateUtils: { resolveDatasourceUrl: Vr, getBatchRequestPayload: Fr, prismaGraphQLToJSError: Mr, PrismaClientUnknownRequestError: V, PrismaClientInitializationError: v, PrismaClientKnownRequestError: z3, debug: N("prisma:client:accelerateEngine"), engineVersion: fu.version, clientVersion: e.clientVersion } }, rr("clientVersion", e.clientVersion), this._engine = jl(e, this._engineConfig), this._requestHandler = new ei(this, i), l.log) for (let f of l.log) {
+            if (l.errorFormat ? this._errorFormat = l.errorFormat : process.env.NODE_ENV === "production" ? this._errorFormat = "minimal" : process.env.NO_COLOR ? this._errorFormat = "colorless" : this._errorFormat = "colorless", this._runtimeDataModel = e.runtimeDataModel, this._engineConfig = { cwd: p, dirname: e.dirname, enableDebugLogs: c, allowTriggerPanic: d.allowTriggerPanic, prismaPath: d.binaryPath ?? void 0, engineEndpoint: d.endpoint, generator: e.generator, showColors: this._errorFormat === "pretty", logLevel: l.log && eu(l.log), logQueries: l.log && !!(typeof l.log == "string" ? l.log === "query" : l.log.find((f) => typeof f == "string" ? f === "query" : f.level === "query")), env: a?.parsed ?? {}, flags: [], engineWasm: e.engineWasm, compilerWasm: e.compilerWasm, clientVersion: e.clientVersion, engineVersion: e.engineVersion, previewFeatures: this._previewFeatures, activeProvider: e.activeProvider, inlineSchema: e.inlineSchema, overrideDatasources: pl(l, e.datasourceNames), inlineDatasources: e.inlineDatasources, inlineSchemaHash: e.inlineSchemaHash, tracingHelper: this._tracingHelper, transactionOptions: { maxWait: l.transactionOptions?.maxWait ?? 2e3, timeout: l.transactionOptions?.timeout ?? 5e3, isolationLevel: l.transactionOptions?.isolationLevel }, logEmitter: i, isBundled: e.isBundled, adapter: s }, this._accelerateEngineConfig = { ...this._engineConfig, accelerateUtils: { resolveDatasourceUrl: Vr, getBatchRequestPayload: Fr, prismaGraphQLToJSError: Mr, PrismaClientUnknownRequestError: V, PrismaClientInitializationError: v, PrismaClientKnownRequestError: z2, debug: N("prisma:client:accelerateEngine"), engineVersion: fu.version, clientVersion: e.clientVersion } }, rr("clientVersion", e.clientVersion), this._engine = jl(e, this._engineConfig), this._requestHandler = new ei(this, i), l.log) for (let f of l.log) {
               let h = typeof f == "string" ? f : f.emit === "stdout" ? f.level : null;
               h && this.$on(h, (g) => {
                 tt.log(`${tt.tags[h] ?? ""}`, g.message || g.query);
@@ -5914,13 +5914,16 @@ var require_prisma = __commonJS({
   }
 });
 
-// app/controllers/authentication/sign-in.controller.ts
-var sign_in_controller_exports = {};
-__export(sign_in_controller_exports, {
-  default: () => SignInController
+// app/use-case/administrator/members/update.use-case.ts
+var update_use_case_exports = {};
+__export(update_use_case_exports, {
+  default: () => UpdateUseCase
 });
-module.exports = __toCommonJS(sign_in_controller_exports);
-var import_fastify_decorators2 = require("fastify-decorators");
+module.exports = __toCommonJS(update_use_case_exports);
+
+// config/database.ts
+var import_adapter_neon = require("@prisma/adapter-neon");
+var import_prisma = __toESM(require_prisma());
 
 // start/env.ts
 var import_config = require("dotenv/config");
@@ -5947,13 +5950,7 @@ if (!validation.success) {
 }
 var Env = validation.data;
 
-// app/use-case/authentication/sign-in.use-case.ts
-var import_bcryptjs = __toESM(require("bcryptjs"));
-var import_fastify_decorators = require("fastify-decorators");
-
 // config/database.ts
-var import_adapter_neon = require("@prisma/adapter-neon");
-var import_prisma = __toESM(require_prisma());
 var prisma = new import_prisma.PrismaClient();
 if (Env.NODE_ENV === "production") {
   const adapter = new import_adapter_neon.PrismaNeon({
@@ -6126,104 +6123,64 @@ var ApplicationException = class _ApplicationException extends Error {
   }
 };
 
-// app/use-case/authentication/sign-in.use-case.ts
-var SignInUseCase = class {
-  // constructor(
-  // 	private readonly repository: UserRepositoryContract = getInstanceByToken(
-  // 		UserRepositoryMongoose,
-  // 	),
-  // ) {}
-  async execute(payload) {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: payload.email
-      }
+// app/use-case/administrator/members/update.use-case.ts
+var import_fastify_decorators = require("fastify-decorators");
+var UpdateUseCase = class {
+  async execute({
+    id,
+    // id do member
+    address,
+    responsible,
+    name,
+    role,
+    ...member
+  }) {
+    const exist = await prisma.member.findUnique({
+      where: { id },
+      include: { user: true }
     });
-    if (!user)
-      return left(ApplicationException.Unauthorized("Invalid credentials"));
-    const passwordMatch = await import_bcryptjs.default.compare(
-      payload.password,
-      user.password
-    );
-    if (!passwordMatch)
-      return left(ApplicationException.Unauthorized("Invalid credentials"));
-    return right(user);
-  }
-};
-SignInUseCase = __decorateClass([
-  (0, import_fastify_decorators.Service)()
-], SignInUseCase);
-
-// app/validators/authentication/sign-in.validator.ts
-var import_zod2 = __toESM(require("zod"));
-var SignInSchema = import_zod2.default.object({
-  email: import_zod2.default.string().trim(),
-  password: import_zod2.default.string().trim()
-});
-
-// app/controllers/authentication/sign-in.controller.ts
-var SignInController = class {
-  constructor(useCase = (0, import_fastify_decorators2.getInstanceByToken)(SignInUseCase)) {
-    this.useCase = useCase;
-  }
-  async handle(request, response) {
-    const payload = SignInSchema.parse(request.body);
-    const result = await this.useCase.execute(payload);
-    if (result.isLeft()) {
-      const error = result.value;
-      return response.status(error.code).send({
-        message: error.message,
-        code: error.code,
-        cause: error.cause
-      });
-    }
-    const jwt = {
-      email: result?.value?.email,
-      name: result?.value?.name,
-      sub: result?.value?.id
-    };
-    const accessToken = await response.jwtSign(jwt, {
-      sub: result?.value?.id,
-      expiresIn: "1d"
-    });
-    const refreshToken = await response.jwtSign(
-      {
-        sub: result?.value?.id,
-        type: "refresh"
+    if (!exist)
+      return left(ApplicationException.NotFound("Membro n\xE3o encontrado"));
+    const updated = await prisma.user.update({
+      where: { id: exist.userId },
+      data: {
+        name,
+        role,
+        member: {
+          update: {
+            ...member,
+            ...member.birthDate && { birthDate: new Date(member.birthDate) }
+          }
+        },
+        ...responsible && {
+          responsible: {
+            upsert: {
+              create: responsible,
+              update: responsible
+            }
+          }
+        },
+        ...address && {
+          address: {
+            upsert: {
+              create: address,
+              update: address
+            }
+          }
+        }
       },
-      {
-        sub: result?.value?.id,
-        expiresIn: "7d"
+      include: {
+        member: true,
+        address: true,
+        responsible: true
       }
-    );
-    const cookieOptions = {
-      path: "/",
-      secure: Env.NODE_ENV === "production",
-      sameSite: "lax",
-      httpOnly: true
-    };
-    response.setCookie("accessToken", accessToken, {
-      ...cookieOptions,
-      maxAge: 24 * 60 * 60 * 1e3
-      // 24 horas
-    }).setCookie("refreshToken", refreshToken, {
-      ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1e3
-      // 7 dias em ms
     });
-    return response.status(200).send();
+    return right(updated);
   }
 };
-__decorateClass([
-  (0, import_fastify_decorators2.POST)({
-    url: "/sign-in"
-  })
-], SignInController.prototype, "handle", 1);
-SignInController = __decorateClass([
-  (0, import_fastify_decorators2.Controller)({
-    route: "authentication"
-  })
-], SignInController);
+UpdateUseCase = __decorateClass([
+  (0, import_fastify_decorators.Service)()
+], UpdateUseCase);
 /*! Bundled license information:
 
 decimal.js/decimal.mjs:

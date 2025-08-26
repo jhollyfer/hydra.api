@@ -50,7 +50,7 @@ const Responsible = z.object({
 
 // Só pede nome, RG, data de nascimento e filiação.
 
-const CreateMemberSchema = z.object({
+const UpdateMemberSchema = z.object({
   name: z.string().trim(),
   cpf: z
     .string()
@@ -78,4 +78,4 @@ const CreateMemberSchema = z.object({
   responsible: Responsible,
 });
 
-export default CreateMemberSchema;
+export default UpdateMemberSchema;

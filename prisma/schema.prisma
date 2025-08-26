@@ -35,8 +35,8 @@ model User {
 
 model Member {
   id        String   @id @default(uuid())
-  cpf       String   @unique
-  rg        String?
+  cpf       String?  @unique
+  rg        String?  @unique
   birthDate DateTime
   extras    String?
   // Este membro pertence a qual usuário
@@ -50,10 +50,10 @@ model Member {
 
 model Address {
   id           String   @id @default(uuid())
-  street       String
+  street       String?
   number       String?
   complement   String?
-  neighborhood String
+  neighborhood String?
   // Este endereço pertence a qual usuário
   userId       String?  @unique
   user         User?    @relation("address", fields: [userId], references: [id], onDelete: Cascade)

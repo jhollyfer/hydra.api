@@ -17,7 +17,7 @@ CREATE TABLE "public"."users" (
 -- CreateTable
 CREATE TABLE "public"."members" (
     "id" TEXT NOT NULL,
-    "cpf" TEXT NOT NULL,
+    "cpf" TEXT,
     "rg" TEXT,
     "birthDate" TIMESTAMP(3) NOT NULL,
     "extras" TEXT,
@@ -59,6 +59,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "public"."users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "members_cpf_key" ON "public"."members"("cpf");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "members_rg_key" ON "public"."members"("rg");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "members_userId_key" ON "public"."members"("userId");
