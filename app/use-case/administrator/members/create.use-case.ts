@@ -24,7 +24,12 @@ export default class CreateUseCase {
     });
 
     if (exist)
-      return left(ApplicationException.Conflict('Member already exists'));
+      return left(
+        ApplicationException.Conflict(
+          'Member already exists',
+          'MEMBER_ALREADY_EXISTS',
+        ),
+      );
 
     const created = await prisma.user.create({
       data: {
