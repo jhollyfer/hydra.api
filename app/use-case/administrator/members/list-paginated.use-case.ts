@@ -56,7 +56,10 @@ export default class ListPaginatedUseCase {
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        // createdAt: 'desc',
+        user: {
+          name: 'asc',
+        },
       },
     });
 
