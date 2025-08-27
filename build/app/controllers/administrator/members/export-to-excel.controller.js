@@ -5915,12 +5915,31 @@ var require_prisma = __commonJS({
   }
 });
 
-// app/use-case/administrator/members/list-paginated.use-case.ts
-var list_paginated_use_case_exports = {};
-__export(list_paginated_use_case_exports, {
-  default: () => ListPaginatedUseCase
+// app/controllers/administrator/members/export-to-excel.controller.ts
+var export_to_excel_controller_exports = {};
+__export(export_to_excel_controller_exports, {
+  default: () => ExportMembersController
 });
-module.exports = __toCommonJS(list_paginated_use_case_exports);
+module.exports = __toCommonJS(export_to_excel_controller_exports);
+
+// app/middlewares/authentication.middleware.ts
+async function AuthenticationMiddleware(request, response) {
+  try {
+    const decoded = await request.jwtVerify();
+    request.user = {
+      sub: decoded.sub ?? void 0,
+      email: decoded?.email ?? void 0,
+      name: decoded?.name ?? void 0
+    };
+  } catch (error) {
+    console.error(error);
+    return response.status(401).send({
+      statusCode: 401,
+      error: "N\xE3o autorizado",
+      message: "Usu\xE1rio n\xE3o autenticado"
+    });
+  }
+}
 
 // config/database.ts
 var import_adapter_neon = require("@prisma/adapter-neon");
@@ -5963,6 +5982,17 @@ if (Env.NODE_ENV === "production") {
 }
 
 // app/core/either.ts
+var Left = class {
+  constructor(value) {
+    this.value = value;
+  }
+  isRight() {
+    return false;
+  }
+  isLeft() {
+    return true;
+  }
+};
 var Right = class {
   constructor(value) {
     this.value = value;
@@ -5974,45 +6004,151 @@ var Right = class {
     return false;
   }
 };
+var left = (value) => {
+  return new Left(value);
+};
 var right = (value) => {
   return new Right(value);
 };
 
-// app/use-case/administrator/members/list-paginated.use-case.ts
+// app/exceptions/application.ts
+var ApplicationException = class _ApplicationException extends Error {
+  constructor(payload) {
+    super(payload.message);
+    this.cause = payload.cause;
+    this.code = payload.code;
+  }
+  // Métodos estáticos para cada código HTTP de erro 4xx e 5xx
+  // 4xx Client Errors
+  static BadRequest(message = "Bad Request", cause = "INVALID_PARAMETERS") {
+    return new _ApplicationException({ message, code: 400, cause });
+  }
+  static Unauthorized(message = "Unauthorized", cause = "AUTHENTICATION_REQUIRED") {
+    return new _ApplicationException({ message, code: 401, cause });
+  }
+  static PaymentRequired(message = "Payment Required", cause = "PAYMENT_REQUIRED") {
+    return new _ApplicationException({ message, code: 402, cause });
+  }
+  static Forbidden(message = "Forbidden", cause = "ACCESS_DENIED") {
+    return new _ApplicationException({ message, code: 403, cause });
+  }
+  static NotFound(message = "Not Found", cause = "RESOURCE_NOT_FOUND") {
+    return new _ApplicationException({ message, code: 404, cause });
+  }
+  static MethodNotAllowed(message = "Method Not Allowed", cause = "INVALID_HTTP_METHOD") {
+    return new _ApplicationException({ message, code: 405, cause });
+  }
+  static NotAcceptable(message = "Not Acceptable", cause = "REQUEST_NOT_ACCEPTABLE") {
+    return new _ApplicationException({ message, code: 406, cause });
+  }
+  static ProxyAuthenticationRequired(message = "Proxy Authentication Required", cause = "PROXY_AUTHENTICATION_REQUIRED") {
+    return new _ApplicationException({ message, code: 407, cause });
+  }
+  static RequestTimeout(message = "Request Timeout", cause = "REQUEST_TIMEOUT") {
+    return new _ApplicationException({ message, code: 408, cause });
+  }
+  static Conflict(message = "Conflict", cause = "CONFLICT_IN_REQUEST") {
+    return new _ApplicationException({ message, code: 409, cause });
+  }
+  static Gone(message = "Gone", cause = "RESOURCE_GONE") {
+    return new _ApplicationException({ message, code: 410, cause });
+  }
+  static LengthRequired(message = "Length Required", cause = "CONTENT_LENGTH_REQUIRED") {
+    return new _ApplicationException({ message, code: 411, cause });
+  }
+  static PreconditionFailed(message = "Precondition Failed", cause = "PRECONDITION_NOT_MET") {
+    return new _ApplicationException({ message, code: 412, cause });
+  }
+  static PayloadTooLarge(message = "Payload Too Large", cause = "PAYLOAD_TOO_LARGE") {
+    return new _ApplicationException({ message, code: 413, cause });
+  }
+  static URITooLong(message = "URI Too Long", cause = "URI_TOO_LONG") {
+    return new _ApplicationException({ message, code: 414, cause });
+  }
+  static UnsupportedMediaType(message = "Unsupported Media Type", cause = "UNSUPPORTED_MEDIA_TYPE") {
+    return new _ApplicationException({ message, code: 415, cause });
+  }
+  static RangeNotSatisfiable(message = "Range Not Satisfiable", cause = "RANGE_NOT_SATISFIABLE") {
+    return new _ApplicationException({ message, code: 416, cause });
+  }
+  static ExpectationFailed(message = "Expectation Failed", cause = "EXPECTATION_FAILED") {
+    return new _ApplicationException({ message, code: 417, cause });
+  }
+  static IAmATeapot(message = "I'm a teapot", cause = "TEAPOT_ERROR") {
+    return new _ApplicationException({ message, code: 418, cause });
+  }
+  static MisdirectedRequest(message = "Misdirected Request", cause = "MISDIRECTED_REQUEST") {
+    return new _ApplicationException({ message, code: 421, cause });
+  }
+  static UnprocessableEntity(message = "Unprocessable Entity", cause = "UNPROCESSABLE_ENTITY") {
+    return new _ApplicationException({ message, code: 422, cause });
+  }
+  static Locked(message = "Locked", cause = "RESOURCE_LOCKED") {
+    return new _ApplicationException({ message, code: 423, cause });
+  }
+  static FailedDependency(message = "Failed Dependency", cause = "FAILED_DEPENDENCY") {
+    return new _ApplicationException({ message, code: 424, cause });
+  }
+  static TooEarly(message = "Too Early", cause = "TOO_EARLY") {
+    return new _ApplicationException({ message, code: 425, cause });
+  }
+  static UpgradeRequired(message = "Upgrade Required", cause = "UPGRADE_REQUIRED") {
+    return new _ApplicationException({ message, code: 426, cause });
+  }
+  static PreconditionRequired(message = "Precondition Required", cause = "PRECONDITION_REQUIRED") {
+    return new _ApplicationException({ message, code: 428, cause });
+  }
+  static TooManyRequests(message = "Too Many Requests", cause = "TOO_MANY_REQUESTS") {
+    return new _ApplicationException({ message, code: 429, cause });
+  }
+  static RequestHeaderFieldsTooLarge(message = "Request Header Fields Too Large", cause = "HEADER_FIELDS_TOO_LARGE") {
+    return new _ApplicationException({ message, code: 431, cause });
+  }
+  static UnavailableForLegalReasons(message = "Unavailable For Legal Reasons", cause = "LEGAL_RESTRICTIONS") {
+    return new _ApplicationException({ message, code: 451, cause });
+  }
+  // 5xx Server Errors
+  static InternalServerError(message = "Internal Server Error", cause = "SERVER_ERROR") {
+    return new _ApplicationException({ message, code: 500, cause });
+  }
+  static NotImplemented(message = "Not Implemented", cause = "NOT_IMPLEMENTED") {
+    return new _ApplicationException({ message, code: 501, cause });
+  }
+  static BadGateway(message = "Bad Gateway", cause = "BAD_GATEWAY") {
+    return new _ApplicationException({ message, code: 502, cause });
+  }
+  static ServiceUnavailable(message = "Service Unavailable", cause = "SERVICE_UNAVAILABLE") {
+    return new _ApplicationException({ message, code: 503, cause });
+  }
+  static GatewayTimeout(message = "Gateway Timeout", cause = "GATEWAY_TIMEOUT") {
+    return new _ApplicationException({ message, code: 504, cause });
+  }
+  static HTTPVersionNotSupported(message = "HTTP Version Not Supported", cause = "HTTP_VERSION_NOT_SUPPORTED") {
+    return new _ApplicationException({ message, code: 505, cause });
+  }
+  static VariantAlsoNegotiates(message = "Variant Also Negotiates", cause = "VARIANT_NEGOTIATION_ERROR") {
+    return new _ApplicationException({ message, code: 506, cause });
+  }
+  static InsufficientStorage(message = "Insufficient Storage", cause = "INSUFFICIENT_STORAGE") {
+    return new _ApplicationException({ message, code: 507, cause });
+  }
+  static LoopDetected(message = "Loop Detected", cause = "LOOP_DETECTED") {
+    return new _ApplicationException({ message, code: 508, cause });
+  }
+  static NotExtended(message = "Not Extended", cause = "NOT_EXTENDED") {
+    return new _ApplicationException({ message, code: 510, cause });
+  }
+  static NetworkAuthenticationRequired(message = "Network Authentication Required", cause = "NETWORK_AUTHENTICATION_REQUIRED") {
+    return new _ApplicationException({ message, code: 511, cause });
+  }
+};
+
+// app/use-case/administrator/members/export-to-excel.use-case.ts
 var import_fastify_decorators = require("fastify-decorators");
-var ListPaginatedUseCase = class {
-  async execute(payload) {
-    const skip2 = (payload.page - 1) * payload.perPage;
-    const where = {
-      ...payload.search && {
-        OR: [
-          {
-            user: {
-              OR: [
-                {
-                  name: {
-                    contains: payload.search,
-                    mode: "insensitive"
-                  }
-                },
-                {
-                  email: {
-                    contains: payload.search,
-                    mode: "insensitive"
-                  }
-                }
-              ]
-            }
-          },
-          { cpf: { contains: payload.search, mode: "insensitive" } },
-          { rg: { contains: payload.search, mode: "insensitive" } }
-        ]
-      }
-    };
+var XLSX = __toESM(require("xlsx"));
+var ExportToExcelUseCase = class {
+  async execute() {
     const members = await prisma.member.findMany({
-      take: payload.perPage,
-      skip: skip2,
-      where,
       include: {
         user: {
           include: {
@@ -6025,26 +6161,128 @@ var ListPaginatedUseCase = class {
         createdAt: "desc"
       }
     });
-    const total = await prisma.member.count({
-      where
-    });
-    const lastPage = Math.ceil(total / payload.perPage) || 1;
-    const result = {
-      data: members,
-      meta: {
-        total,
-        perPage: payload.perPage,
-        currentPage: payload.page,
-        lastPage,
-        firstPage: 1
+    if (members.length === 0) {
+      return left(
+        ApplicationException.NotFound("Nenhum membro encontrado para exportar")
+      );
+    }
+    const excelData = members.map((member) => ({
+      Nome: member.user?.name || "",
+      Email: member.user?.email || "",
+      CPF: member.cpf || "",
+      RG: member.rg || "",
+      "Data de Nascimento": member.birthDate ? new Date(member.birthDate).toLocaleDateString("pt-BR") : "",
+      "Data de Cadastro": new Date(member.createdAt).toLocaleDateString(
+        "pt-BR"
+      ),
+      // Endereço
+      Rua: member.user?.address?.street || "",
+      N\u00FAmero: member.user?.address?.number || "",
+      Complemento: member.user?.address?.complement || "",
+      Bairro: member.user?.address?.neighborhood || "",
+      // Responsável (se existir)
+      "Nome da M\xE3e": member.user?.responsible?.mother || "",
+      "Nome do Pai": member.user?.responsible?.father || ""
+    }));
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const columnWidths = [
+      { wch: 25 },
+      // Nome
+      { wch: 30 },
+      // Email
+      { wch: 15 },
+      // CPF
+      { wch: 15 },
+      // RG
+      { wch: 18 },
+      // Data de Nascimento
+      { wch: 18 },
+      // Data de Cadastro
+      { wch: 30 },
+      // Rua
+      { wch: 8 },
+      // Número
+      { wch: 20 },
+      // Complemento
+      { wch: 20 },
+      // Bairro
+      { wch: 25 },
+      // Nome da Mãe
+      { wch: 25 }
+      // Nome do Pai
+    ];
+    worksheet["!cols"] = columnWidths;
+    const headerRange = XLSX.utils.decode_range(worksheet["!ref"] || "A1");
+    for (let col = headerRange.s.c; col <= headerRange.e.c; col++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col });
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "4472C4" } },
+          alignment: { horizontal: "center", vertical: "center" }
+        };
       }
-    };
-    return right(result);
+    }
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Membros");
+    const excelBuffer = XLSX.write(workbook, {
+      type: "buffer",
+      bookType: "xlsx"
+    });
+    return right(excelBuffer);
   }
 };
-ListPaginatedUseCase = __decorateClass([
+ExportToExcelUseCase = __decorateClass([
   (0, import_fastify_decorators.Service)()
-], ListPaginatedUseCase);
+], ExportToExcelUseCase);
+
+// app/controllers/administrator/members/export-to-excel.controller.ts
+var import_fastify_decorators2 = require("fastify-decorators");
+var ExportMembersController = class {
+  constructor(useCase = (0, import_fastify_decorators2.getInstanceByToken)(
+    ExportToExcelUseCase
+  )) {
+    this.useCase = useCase;
+  }
+  async handle(request, response) {
+    const result = await this.useCase.execute();
+    if (result.isLeft()) {
+      const error = result.value;
+      return response.status(error.code).send({
+        message: error.message,
+        code: error.code,
+        cause: error.cause
+      });
+    }
+    const excelBuffer = result.value;
+    const date = (/* @__PURE__ */ new Date()).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      second: "2-digit",
+      minute: "2-digit",
+      hour: "2-digit"
+    })?.replace(/\D/g, "");
+    const filename = "MEMBROS_".concat(date, ".xlsx");
+    response.header(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ).header("Content-Disposition", `attachment; filename="${filename}"`).send(excelBuffer);
+  }
+};
+__decorateClass([
+  (0, import_fastify_decorators2.GET)({
+    url: "/export-to-excel",
+    options: {
+      onRequest: [AuthenticationMiddleware]
+    }
+  })
+], ExportMembersController.prototype, "handle", 1);
+ExportMembersController = __decorateClass([
+  (0, import_fastify_decorators2.Controller)({
+    route: "/administrator/members"
+  })
+], ExportMembersController);
 /*! Bundled license information:
 
 decimal.js/decimal.mjs:
