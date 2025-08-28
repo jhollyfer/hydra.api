@@ -1,6 +1,17 @@
-// Use Case - get-dashboard-stats.use-case.ts
 import { prisma } from '@config/database';
 import { Either, right } from '@core/either';
+import {
+  endOfMonth,
+  format,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+  subDays,
+  subMonths,
+  subWeeks,
+} from 'date-fns';
+import { fromZonedTime, toZonedTime } from 'date-fns-tz';
+import { ptBR } from 'date-fns/locale';
 import { Service } from 'fastify-decorators';
 
 interface DashboardStats {
@@ -32,25 +43,37 @@ type Response = Either<null, DashboardResponse>;
 
 @Service()
 export default class DashboardStatsUseCase {
-  async execute(): Promise<Response> {
+  async execute(timezone: string = 'America/Rio_Branco'): Promise<Response> {
     const now = new Date();
-    const startOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
+
+    // Converter para o timezone do usuário
+    const nowInTimezone = toZonedTime(now, timezone);
+
+    // Calcular datas no timezone do usuário e depois converter para UTC
+    const todayStart = fromZonedTime(startOfDay(nowInTimezone), timezone);
+    const yesterdayStart = fromZonedTime(
+      startOfDay(subDays(nowInTimezone, 1)),
+      timezone,
     );
-    const startOfYesterday = new Date(startOfToday);
-    startOfYesterday.setDate(startOfYesterday.getDate() - 1);
 
-    const startOfWeek = new Date(startOfToday);
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+    const weekStart = fromZonedTime(
+      startOfWeek(nowInTimezone, { weekStartsOn: 0 }),
+      timezone,
+    );
+    const lastWeekStart = fromZonedTime(
+      startOfWeek(subWeeks(nowInTimezone, 1), { weekStartsOn: 0 }),
+      timezone,
+    );
 
-    const startOfLastWeek = new Date(startOfWeek);
-    startOfLastWeek.setDate(startOfLastWeek.getDate() - 7);
-
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    const monthStart = fromZonedTime(startOfMonth(nowInTimezone), timezone);
+    const lastMonthStart = fromZonedTime(
+      startOfMonth(subMonths(nowInTimezone, 1)),
+      timezone,
+    );
+    const lastMonthEnd = fromZonedTime(
+      endOfMonth(subMonths(nowInTimezone, 1)),
+      timezone,
+    );
 
     // Total de membros
     const totalMembers = await prisma.member.count();
@@ -59,7 +82,7 @@ export default class DashboardStatsUseCase {
     const todayRegistrations = await prisma.member.count({
       where: {
         createdAt: {
-          gte: startOfToday,
+          gte: todayStart,
         },
       },
     });
@@ -68,8 +91,8 @@ export default class DashboardStatsUseCase {
     const yesterdayRegistrations = await prisma.member.count({
       where: {
         createdAt: {
-          gte: startOfYesterday,
-          lt: startOfToday,
+          gte: yesterdayStart,
+          lt: todayStart,
         },
       },
     });
@@ -78,7 +101,7 @@ export default class DashboardStatsUseCase {
     const weekRegistrations = await prisma.member.count({
       where: {
         createdAt: {
-          gte: startOfWeek,
+          gte: weekStart,
         },
       },
     });
@@ -87,8 +110,8 @@ export default class DashboardStatsUseCase {
     const lastWeekRegistrations = await prisma.member.count({
       where: {
         createdAt: {
-          gte: startOfLastWeek,
-          lt: startOfWeek,
+          gte: lastWeekStart,
+          lt: weekStart,
         },
       },
     });
@@ -97,7 +120,7 @@ export default class DashboardStatsUseCase {
     const monthRegistrations = await prisma.member.count({
       where: {
         createdAt: {
-          gte: startOfMonth,
+          gte: monthStart,
         },
       },
     });
@@ -106,8 +129,8 @@ export default class DashboardStatsUseCase {
     const lastMonthRegistrations = await prisma.member.count({
       where: {
         createdAt: {
-          gte: startOfLastMonth,
-          lte: endOfLastMonth,
+          gte: lastMonthStart,
+          lte: lastMonthEnd,
         },
       },
     });
@@ -142,64 +165,55 @@ export default class DashboardStatsUseCase {
 
     // Cadastros por dia da semana (últimos 7 dias)
     const registrationsByDay: RegistrationsByDay[] = [];
-    const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
 
     for (let i = 6; i >= 0; i--) {
-      const date = new Date(startOfToday);
-      date.setDate(date.getDate() - i);
-      const nextDate = new Date(date);
-      nextDate.setDate(nextDate.getDate() + 1);
+      const dayInTimezone = subDays(nowInTimezone, i);
+      const dayStart = fromZonedTime(startOfDay(dayInTimezone), timezone);
+      const dayEnd = fromZonedTime(
+        startOfDay(subDays(dayInTimezone, -1)),
+        timezone,
+      );
 
       const count = await prisma.member.count({
         where: {
           createdAt: {
-            gte: date,
-            lt: nextDate,
+            gte: dayStart,
+            lt: dayEnd,
           },
         },
       });
 
       registrationsByDay.push({
-        date: dayNames[date.getDay()],
+        date: format(dayInTimezone, 'EEE', { locale: ptBR }),
         count,
       });
     }
 
     // Tendência mensal (últimos 5 meses)
     const monthlyTrend: MonthlyTrend[] = [];
-    const monthNames = [
-      'Jan',
-      'Fev',
-      'Mar',
-      'Abr',
-      'Mai',
-      'Jun',
-      'Jul',
-      'Ago',
-      'Set',
-      'Out',
-      'Nov',
-      'Dez',
-    ];
 
     for (let i = 4; i >= 0; i--) {
-      const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const nextMonth = new Date(
-        monthDate.getFullYear(),
-        monthDate.getMonth() + 1,
-        1,
+      const monthInTimezone = subMonths(nowInTimezone, i);
+      const monthStartUTC = fromZonedTime(
+        startOfMonth(monthInTimezone),
+        timezone,
+      );
+      const nextMonthUTC = fromZonedTime(
+        startOfMonth(subMonths(monthInTimezone, -1)),
+        timezone,
       );
 
       const members = await prisma.member.count({
         where: {
           createdAt: {
-            lt: nextMonth,
+            gte: monthStartUTC,
+            lt: nextMonthUTC,
           },
         },
       });
 
       monthlyTrend.push({
-        month: monthNames[monthDate.getMonth()],
+        month: format(monthInTimezone, 'MMM', { locale: ptBR }),
         members,
       });
     }
