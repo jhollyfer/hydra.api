@@ -46,10 +46,8 @@ export default class DashboardStatsUseCase {
   async execute(timezone: string = 'America/Rio_Branco'): Promise<Response> {
     const now = new Date();
 
-    // Converter para o timezone do usuário
     const nowInTimezone = toZonedTime(now, timezone);
 
-    // Calcular datas no timezone do usuário e depois converter para UTC
     const todayStart = fromZonedTime(startOfDay(nowInTimezone), timezone);
     const yesterdayStart = fromZonedTime(
       startOfDay(subDays(nowInTimezone, 1)),
@@ -75,10 +73,8 @@ export default class DashboardStatsUseCase {
       timezone,
     );
 
-    // Total de membros
     const totalMembers = await prisma.member.count();
 
-    // Cadastros de hoje
     const todayRegistrations = await prisma.member.count({
       where: {
         createdAt: {
@@ -87,7 +83,6 @@ export default class DashboardStatsUseCase {
       },
     });
 
-    // Cadastros de ontem
     const yesterdayRegistrations = await prisma.member.count({
       where: {
         createdAt: {
@@ -97,7 +92,6 @@ export default class DashboardStatsUseCase {
       },
     });
 
-    // Cadastros desta semana
     const weekRegistrations = await prisma.member.count({
       where: {
         createdAt: {
@@ -106,7 +100,6 @@ export default class DashboardStatsUseCase {
       },
     });
 
-    // Cadastros da semana passada
     const lastWeekRegistrations = await prisma.member.count({
       where: {
         createdAt: {
@@ -116,7 +109,6 @@ export default class DashboardStatsUseCase {
       },
     });
 
-    // Cadastros deste mês
     const monthRegistrations = await prisma.member.count({
       where: {
         createdAt: {
@@ -125,7 +117,6 @@ export default class DashboardStatsUseCase {
       },
     });
 
-    // Cadastros do mês passado
     const lastMonthRegistrations = await prisma.member.count({
       where: {
         createdAt: {
@@ -135,39 +126,43 @@ export default class DashboardStatsUseCase {
       },
     });
 
-    // Calcular crescimentos
-    const dailyGrowth =
-      yesterdayRegistrations > 0
-        ? ((todayRegistrations - yesterdayRegistrations) /
-            yesterdayRegistrations) *
-          100
-        : todayRegistrations > 0
-          ? 100
-          : 0;
+    let dailyGrowth = 0;
 
-    const weeklyGrowth =
-      lastWeekRegistrations > 0
-        ? ((weekRegistrations - lastWeekRegistrations) /
-            lastWeekRegistrations) *
-          100
-        : weekRegistrations > 0
-          ? 100
-          : 0;
+    if (yesterdayRegistrations > 0) {
+      dailyGrowth =
+        ((todayRegistrations - yesterdayRegistrations) /
+          yesterdayRegistrations) *
+        100;
+    } else if (todayRegistrations > 0) {
+      dailyGrowth = 100;
+    }
 
-    const monthlyGrowth =
-      lastMonthRegistrations > 0
-        ? ((monthRegistrations - lastMonthRegistrations) /
-            lastMonthRegistrations) *
-          100
-        : monthRegistrations > 0
-          ? 100
-          : 0;
+    let weeklyGrowth = 0;
+
+    if (lastWeekRegistrations > 0) {
+      weeklyGrowth =
+        ((weekRegistrations - lastWeekRegistrations) / lastWeekRegistrations) *
+        100;
+    } else if (weekRegistrations > 0) {
+      weeklyGrowth = 100;
+    }
+
+    let monthlyGrowth = 0;
+
+    if (lastMonthRegistrations > 0) {
+      monthlyGrowth =
+        ((monthRegistrations - lastMonthRegistrations) /
+          lastMonthRegistrations) *
+        100;
+    } else if (monthRegistrations > 0) {
+      monthlyGrowth = 100;
+    }
 
     // Cadastros por dia da semana (últimos 7 dias)
     const registrationsByDay: RegistrationsByDay[] = [];
 
-    for (let i = 6; i >= 0; i--) {
-      const dayInTimezone = subDays(nowInTimezone, i);
+    for (let day = 6; day >= 0; day--) {
+      const dayInTimezone = subDays(nowInTimezone, day);
       const dayStart = fromZonedTime(startOfDay(dayInTimezone), timezone);
       const dayEnd = fromZonedTime(
         startOfDay(subDays(dayInTimezone, -1)),
@@ -192,8 +187,8 @@ export default class DashboardStatsUseCase {
     // Tendência mensal (últimos 5 meses)
     const monthlyTrend: MonthlyTrend[] = [];
 
-    for (let i = 4; i >= 0; i--) {
-      const monthInTimezone = subMonths(nowInTimezone, i);
+    for (let month = 4; month >= 0; month--) {
+      const monthInTimezone = subMonths(nowInTimezone, month);
       const monthStartUTC = fromZonedTime(
         startOfMonth(monthInTimezone),
         timezone,
