@@ -65,6 +65,7 @@ kernel.register(cors, {
     'Origin',
     'Access-Control-Request-Method',
     'Access-Control-Request-Headers',
+    'X-Timezone',
   ],
   exposedHeaders: ['Set-Cookie'],
   optionsSuccessStatus: 200,

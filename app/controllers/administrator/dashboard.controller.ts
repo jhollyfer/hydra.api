@@ -20,16 +20,14 @@ export default class DashboardController {
     },
   })
   async handle(request: FastifyRequest, response: FastifyReply): Promise<void> {
-    const result = await this.useCase.execute();
+    const timezone =
+      (request.headers['x-timezone'] as string) ?? 'America/Rio_Branco';
+
+    console.log(timezone);
+
+    const result = await this.useCase.execute(timezone);
 
     if (result.isLeft()) {
-      //   const error = result.value;
-
-      //   return response.status(error?.code).send({
-      //     message: error.message,
-      //     code: error.code,
-      //     cause: error.cause,
-      //   });
       return response.status(500).send();
     }
 
