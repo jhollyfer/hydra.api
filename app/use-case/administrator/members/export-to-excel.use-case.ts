@@ -26,7 +26,8 @@ export default class ExportToExcelUseCase {
       );
     }
 
-    const excelData = members.map((member) => ({
+    const excelData = members.map((member, index) => ({
+      'N°': index + 1,
       'Nome Completo': member.user?.name ?? '',
       'CPF/RG': member.rg ?? '',
       Assinatura: '',
@@ -38,6 +39,7 @@ export default class ExportToExcelUseCase {
 
     // Configurar largura das colunas
     const columnWidths = [
+      { wch: 5 }, // Número
       { wch: 30 }, // Nome Completo
       { wch: 20 }, // CPF/RG
       { wch: 25 }, // Assinatura
