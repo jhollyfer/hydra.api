@@ -11,15 +11,12 @@ export default class ExportToExcelUseCase {
   async execute(): Promise<Response> {
     const members = await prisma.member.findMany({
       include: {
-        user: {
-          include: {
-            address: true,
-            responsible: true,
-          },
-        },
+        user: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        user: {
+          name: 'asc',
+        },
       },
     });
 
@@ -30,24 +27,9 @@ export default class ExportToExcelUseCase {
     }
 
     const excelData = members.map((member) => ({
-      Nome: member.user?.name || '',
-      Email: member.user?.email || '',
-      CPF: member.cpf || '',
-      RG: member.rg || '',
-      'Data de Nascimento': member.birthDate
-        ? new Date(member.birthDate).toLocaleDateString('pt-BR')
-        : '',
-      'Data de Cadastro': new Date(member.createdAt).toLocaleDateString(
-        'pt-BR',
-      ),
-      // Endereço
-      Rua: member.user?.address?.street || '',
-      Número: member.user?.address?.number || '',
-      Complemento: member.user?.address?.complement || '',
-      Bairro: member.user?.address?.neighborhood || '',
-      // Responsável (se existir)
-      'Nome da Mãe': member.user?.responsible?.mother || '',
-      'Nome do Pai': member.user?.responsible?.father || '',
+      'Nome Completo': member.user?.name ?? '',
+      'CPF/RG': member.rg ?? '',
+      Assinatura: '',
     }));
 
     // Criar workbook e worksheet
@@ -56,18 +38,9 @@ export default class ExportToExcelUseCase {
 
     // Configurar largura das colunas
     const columnWidths = [
-      { wch: 25 }, // Nome
-      { wch: 30 }, // Email
-      { wch: 15 }, // CPF
-      { wch: 15 }, // RG
-      { wch: 18 }, // Data de Nascimento
-      { wch: 18 }, // Data de Cadastro
-      { wch: 30 }, // Rua
-      { wch: 8 }, // Número
-      { wch: 20 }, // Complemento
-      { wch: 20 }, // Bairro
-      { wch: 25 }, // Nome da Mãe
-      { wch: 25 }, // Nome do Pai
+      { wch: 30 }, // Nome Completo
+      { wch: 20 }, // CPF/RG
+      { wch: 25 }, // Assinatura
     ];
 
     worksheet['!cols'] = columnWidths;
@@ -84,9 +57,6 @@ export default class ExportToExcelUseCase {
         };
       }
     }
-
-    // Adicionar filtros automáticos
-    // worksheet['!autofilter'] = { ref: worksheet['!ref'] || 'A1' };
 
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Membros');
 
